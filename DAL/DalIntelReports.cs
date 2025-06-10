@@ -2,47 +2,23 @@ using MySql.Data.MySqlClient;
 
 namespace Malshinon
 {
-    class DalIntelReports
+    class DalIntelReports : Dal
     {
-        DatabaseManagement _database;
-        public DalIntelReports(DatabaseManagement database)
+        public DalIntelReports(DatabaseManagement database) : base(database) { }
+
+        public List<IntelReport> GetAllIntelReports()
         {
-            _database = database;
+            List<IntelReport> ListIntelReport = new();
+
+            MySqlDataReader reader = Query("SELECT * FROM intel_reports;");
+
+            while (reader.Read())
+            {
+                ListIntelReport.Add(Create.CreatingInstanceIntelReport(reader));
+            }
+            return ListIntelReport;
         }
 
-        public List<Person> Query(string Query, List<string>? parameters = null, List<string>? value = null)
-        {
-            List<Person> ListPerson = new();
-            MySqlConnection coon = _database.GetConnction();
-            MySqlDataReader reader;
-            MySqlCommand cmd = coon.CreateCommand();
-
-            cmd.CommandText = Query;
-            
-            if (parameters != null && value != null && parameters.Count == value.Count)
-            {
-                for (int i = 0; i < parameters.Count; i++)
-                    cmd.Parameters.AddWithValue(parameters[0], value[0]);
-            }
-
-            try
-            {
-                reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    ListPerson.Add(Create.CreatingInstance(reader));
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            finally
-            {
-                coon.Close();
-            }
-            return ListPerson;
-        }
 
     }
 

@@ -3,15 +3,10 @@ using MySqlX.XDevAPI.CRUD;
 
 namespace Malshinon
 {
-    class ManagementPerson
+    class ManagementPerson : Management
     {
-        DalPeople _dalPeople;
-        DalPeopleStatus _dalPeopleStatus;
-        public ManagementPerson(DatabaseManagement database)
-        {
-            _dalPeople = new(database);
-            _dalPeopleStatus = new(database);
-        }
+
+        public ManagementPerson(DatabaseManagement database) : base(database) { }
 
         public Person AddPerson(string firstName, string lastName)
         {

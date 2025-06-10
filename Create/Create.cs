@@ -1,3 +1,4 @@
+using System.Data;
 using MySql.Data.MySqlClient;
 
 namespace Malshinon
@@ -19,7 +20,7 @@ namespace Malshinon
         }
 
 
-        static public Person CreatingInstance(MySqlDataReader reader)
+        static public Person CreatingInstancePerson(MySqlDataReader reader)
         {
             Person person = new();
             try
@@ -34,6 +35,24 @@ namespace Malshinon
                 Console.WriteLine(ex.Message);
             }
             return person;
+        }
+
+        static public IntelReport CreatingInstanceIntelReport(MySqlDataReader reader)
+        {
+            IntelReport intelReport = new();
+            try
+            {
+                intelReport.Id = reader.GetInt32("id");
+                intelReport.ReporterId = reader.GetInt32("reporter_id");
+                intelReport.TargetId = reader.GetInt32("target_id");
+                intelReport.Timestamp = reader.GetDateTime("timestamp");
+                intelReport.Text = reader.GetString("text");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return intelReport;
         }
     }
 

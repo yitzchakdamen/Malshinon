@@ -26,7 +26,7 @@ namespace Malshinon
                 reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    ListPerson.Add(Create.CreatingInstance(reader));
+                    ListPerson.Add(Create.CreatingInstancePerson(reader));
                 }
             }
             catch (Exception ex)
@@ -57,7 +57,7 @@ namespace Malshinon
             {
                 reader = cmd.ExecuteReader();
                 reader.Read();
-                return Create.CreatingInstance(reader);
+                return Create.CreatingInstancePerson(reader);
             }
             catch (Exception ex)
             {
