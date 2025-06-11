@@ -2,85 +2,67 @@ using MySql.Data.MySqlClient;
 
 namespace Malshinon
 {
-    class DalPeople
+    class DalPeople : Dal
     {
-        DatabaseManagement _database;
-        public DalPeople(DatabaseManagement database)
+
+        public DalPeople(DatabaseManagement database) : base(database) { }
+
+        public Person? Insert(Person p)
         {
-            _database = database;
-        }
-
-        public List<Person> GetByQuery(string Query, string? parameters = null, string? value = null)
-        {
-            List<Person> ListPerson = new();
-            MySqlConnection coon = _database.GetConnction();
-            MySqlDataReader reader;
-            MySqlCommand cmd = coon.CreateCommand();
-
-            cmd.CommandText = Query;
-            if (parameters != null)
-                cmd.Parameters.AddWithValue(parameters, value);
-
-            try
-            {
-                reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    ListPerson.Add(Create.CreatingInstancePerson(reader));
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            finally
-            {
-                coon.Close();
-            }
-            return ListPerson;
-        }
-
-        public Person Insert(Person p)
-        {
-            MySqlConnection coon = _database.GetConnction();
-            MySqlDataReader reader;
-            MySqlCommand cmd = coon.CreateCommand();
-            cmd.CommandText = @"
+            string queryText = @"
             INSERT INTO people (first_name, last_name, secret_code)
              VALUES (@first_name, @last_name, @secret_code);";
 
-            cmd.Parameters.AddWithValue("@first_name", p.FirstName);
-            cmd.Parameters.AddWithValue("@last_name", p.LastName);
-            cmd.Parameters.AddWithValue("@secret_code", p.SecretCode);
+            Dictionary<string, object> parametersAndvalue = new() {
+                { "@first_name", p.FirstName },
+                { "@last_name", p.LastName },
+                { "@secret_code", p.SecretCode}};
 
-            try
-            {
-                reader = cmd.ExecuteReader();
-                reader.Read();
-                return Create.CreatingInstancePerson(reader);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
-            finally
-            {
-                coon.Close();
-            }         
-        }
-        public Person? GetIdBySecretCode(string secretCode)
-        {
-            string query = $"SELECT * FROM people WHERE people.secret_code = '{secretCode}':";
-            List<Person> people = GetByQuery(query);
+            MySqlDataReader intelReports = Query(queryText, parametersAndvalue);
+            intelReports.Close();
+            Console.WriteLine("Person inserted into database.");
+            
+            Person? _person = GetIdBySecretCode(p.SecretCode);
 
-            if (people.Count == 1)
-                return people[0];
+            if (_person != null)
+            {
+                Console.WriteLine("Inserted person: " + $"FirstName={p.FirstName}, LastName={p.LastName}, SecretCode={p.SecretCode}");
+                return _person;
+            }
 
             return null;
         }
 
-        
+        public List<Person> GetAllPeople()
+        {
+            List<Person> ListPerson = new();
+
+            MySqlDataReader reader = GetAll("people");
+
+            while (reader.Read())
+            {
+                ListPerson.Add(Create.CreatingInstancePerson(reader));
+            }
+            reader.Close();
+            return ListPerson;
+        }
+
+        public Person? GetIdBySecretCode(string secretCode)
+        {
+            string query = @"SELECT * FROM people WHERE people.secret_code = @secretCode;";
+
+            Dictionary<string, object> parametersAndvalue = new() { { "@secretCode", secretCode } };
+            MySqlDataReader intelReports = Query(query, parametersAndvalue);
+
+            if (intelReports.Read())
+            {
+                return Create.CreatingInstancePerson(intelReports);
+            }
+            intelReports.Close();
+            return null;
+        }
+
+
     }
 
 

@@ -8,7 +8,8 @@ namespace Malshinon
 
         public void AddIntelReports(string text, int personID, int targetId)
         {
-
+            IntelReport report = Create.CreateIntelReport(text, personID, targetId);
+            _dalIntelReports.Insert(report);
         }
 
         public int NumberReportsByReporter(int persenId)
@@ -33,17 +34,21 @@ namespace Malshinon
         }
         int NumberReports(string Query, int persenId, string persen)
         {
-            Dictionary<string, string> parametersAndvalue = new() { { persen, Convert.ToString(persenId) } };
+            Dictionary<string, object> parametersAndvalue = new() { { persen, persenId } };
             MySqlDataReader intelReports = _dalIntelReports.Query(Query, parametersAndvalue);
 
             if (intelReports.Read())
             {
-                return Convert.ToInt32(intelReports.GetString("NumberReports"));
+                int numberReports = intelReports.GetInt32("NumberReports");
+                intelReports.Close();
+
+                return Convert.ToInt32(numberReports);
             }
+            intelReports.Close();
             return 0;
         }
 
-        public int averageLengthReports(int persenId)
+        public int AverageLengthReports(int persenId)
         {
             string Query = @"
             SELECT intel_reports.reporter_id, AVG(LENGTH(intel_reports.text))  as AvgReports
@@ -51,15 +56,17 @@ namespace Malshinon
             WHERE intel_reports.reporter_id = @reporter_id
             GROUP BY intel_reports.reporter_id;";
 
-            Dictionary<string, string> parametersAndvalue = new() { { "@reporter_id", Convert.ToString(persenId) } };
+            Dictionary<string, object> parametersAndvalue = new() { { "@reporter_id", persenId } };
             MySqlDataReader intelReports = _dalIntelReports.Query(Query, parametersAndvalue);
-            intelReports.Read();
-
 
             if (intelReports.Read())
             {
-                return Convert.ToInt32(intelReports.GetString("AvgReports"));
+                double averageLength = intelReports.GetDouble("AvgReports");
+                intelReports.Close();
+
+                return Convert.ToInt32(averageLength);
             }
+            intelReports.Close();
             return 0;
         }
         
@@ -71,20 +78,22 @@ namespace Malshinon
             WHERE intel_reports.timestamp BETWEEN @timeA AND @timeB AND intel_reports.target_id = @target_id
             GROUP BY intel_reports.target_id;";
 
-            Dictionary<string, string> parametersAndvalue = new() {
-                 { "@reporter_id", Convert.ToString(persenId) },
-                 { "@timeA",  Time.AddMinutes(-15).ToString()},
-                 { "@timeB", Time.AddMinutes(15).ToString() }
+            Dictionary<string, object> parametersAndvalue = new() {
+                 { "@target_id", persenId },
+                 { "@timeA",  Time.AddMinutes(-15)},
+                 { "@timeB", Time.AddMinutes(15) }
                  }; 
 
 
             MySqlDataReader intelReports = _dalIntelReports.Query(Query, parametersAndvalue);
-            intelReports.Read();
 
             if (intelReports.Read())
             {
-                return Convert.ToInt32(intelReports.GetString("NumberReports"));
+                int numberReports = intelReports.GetInt32("NumberReports");
+                intelReports.Close();
+                return Convert.ToInt32(numberReports);
             }
+            intelReports.Close();
             return 0;
         }
 

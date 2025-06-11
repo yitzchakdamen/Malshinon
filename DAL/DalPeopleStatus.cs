@@ -2,59 +2,32 @@ using MySql.Data.MySqlClient;
 
 namespace Malshinon
 {
-    class DalPeopleStatus
+    class DalPeopleStatus : Dal
     {
-        DatabaseManagement _database;
-        public DalPeopleStatus(DatabaseManagement database)
+
+        public DalPeopleStatus(DatabaseManagement database) : base(database) { }
+
+        public void Update(int peopleId, string columnName, object newValue)
         {
-            _database = database;
+            string queryText = $"UPDATE people_status SET {columnName} = @newValue WHERE people_status.people_id = @peopleId;";
+
+            Dictionary<string, object> parametersAndvalue = new() { { "@newValue", newValue }, {"@peopleId", peopleId} };
+            MySqlDataReader intelReports = Query(queryText, parametersAndvalue);
+            intelReports.Close();
         }
+
 
         public void Insert(int Id)
         {
-            MySqlConnection coon = _database.GetConnction();
-            MySqlDataReader reader;
-            MySqlCommand cmd = coon.CreateCommand();
-            cmd.CommandText = @"
+            string queryText = @"
             INSERT INTO people_status (people_id)
-             VALUES (@people_id);";
+            VALUES (@people_id);";
 
-            cmd.Parameters.AddWithValue("@people_id", Id);
+            Dictionary<string, object> parametersAndvalue = new() { { "@people_id", Id } };
+            MySqlDataReader intelReports = Query(queryText, parametersAndvalue);
+            intelReports.Close();
 
-            try
-            {
-                reader = cmd.ExecuteReader();
-                return;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
-            finally
-            {
-                coon.Close();
-            }
         }
-
-        // private PersonStatus CreatingInstance(MySqlDataReader reader)
-        // {
-        //     PersonStatus status = new();
-        //     try
-        //     {
-        //         // status.
-        //         // person.Id = reader.GetInt32("id");
-        //         // person.FirstName = reader.GetString("first_name");
-        //         // person.LastName = reader.GetString("last_name");
-        //         // person.SecretCode = reader.GetString("secret_code");
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         Console.WriteLine(ex.Message);
-        //     }
-        //     return status;
-        // }
-
 
     }
 

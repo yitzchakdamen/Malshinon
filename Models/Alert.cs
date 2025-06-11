@@ -1,10 +1,10 @@
 namespace Malshinon
 {
-    public class Notification
+    public class Alert
     {
         public int Id { get; set; }
         public int TargetId { get; set; }
-        public string Reason { get; set; } = string.Empty;
+        public string Reason { get; set; }
         public DateTime Timestamp { get; set; } = DateTime.Now;
 
     }

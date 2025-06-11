@@ -5,14 +5,17 @@ namespace Malshinon
 {
     class Management
     {
-        protected DalPeople _dalPeople;
-        protected DalPeopleStatus _dalPeopleStatus;
-        protected DalIntelReports _dalIntelReports;
+        public DalPeople _dalPeople;
+        public DalPeopleStatus _dalPeopleStatus;
+        public DalIntelReports _dalIntelReports;
+        public DalAlerts _dalAlerts;
+
         public Management(DatabaseManagement database)
         {
             _dalPeople = new(database);
             _dalPeopleStatus = new(database);
             _dalIntelReports = new(database);
+            _dalAlerts = new(database);
         }
 
     }
