@@ -85,7 +85,7 @@ namespace Malshinon
             if (NumberReportsByTime >= 5)
                 managementAlerts.AddAlert(targetId, "Multiple reports received within a short time frame.");
             
-            if (averageLength >= 100 || numberReportsByReporter >= 10)
+            if (averageLength >= 100 && numberReportsByReporter >= 10)
             {
                 PersonStatus? personStatus = managementPerson._dalPeopleStatus.GetPersonStatusById(personID);
                 if (personStatus.PotentialAgent == 0)

@@ -3,31 +3,16 @@ using MySql.Data.MySqlClient;
 
 namespace Malshinon
 {
-    class MenuHandling : HandlingBase
+    class ReportsHandling : HandlingBase
     {
         Tools tools;
         MessageHandling messageHandling;
-        ManagementReports managementReports;
-        public MenuHandling(DatabaseManagement database) : base(database)
+        public ReportsHandling(DatabaseManagement database) : base(database)
         {
             tools = new Tools(managementPerson, managementIntel);
             messageHandling = new MessageHandling(database);
-            managementReports = new ManagementReports(database);
         }
 
-        public void Start()
-        {
-            Console.WriteLine("Welcome to the Malshinon System!");
-            bool exit = false;
-
-            while (!exit)
-            {
-                ShowMenu();
-                string? choice = Console.ReadLine();
-
-                exit = MenuSelection(choice!);
-            }
-        }
 
         public void ShowMenu()
         {
@@ -88,6 +73,7 @@ namespace Malshinon
             Console.WriteLine("Sending message...");
             Console.Write("Enter your information.");
             (string? secretCodePerson , string? firstNamePerson, string? lastNamePerson) = KnowledgeStatus();
+
             Console.Write("Enter the target information.");
             (string? secretCodeTarget , string? firstNameTarget, string? lastNameTarget) = KnowledgeStatus();
 
@@ -105,6 +91,45 @@ namespace Malshinon
             );
         }
 
+        public void ViewAllPotentialAgents()
+        {
+            List<PersonStatus> potentialAgents = managementReports.AllPotentialAgents();
+            View(potentialAgents);
+        }
+
+        public void ViewAllTargetRiskAgents()
+        {
+            List<PersonStatus> targetRiskAgents = managementReports.AllTargetRisk();
+            View(targetRiskAgents);
+        }
+
+        public void View(List<PersonStatus> potentialAgents)
+        {
+            foreach (var agent in potentialAgents)
+            {
+                Person? person = managementPerson._dalPeople.GetPersonById(agent.PeopleId);
+                int numberReports = managementIntel.NumberReportsByReporter(agent.PeopleId);
+                int AvrReports = managementIntel.AverageLengthReports(agent.PeopleId);
+
+                Console.WriteLine("--------------------------------------------------");
+                Console.Write($"Potential Agent ID: {agent.PeopleId}, Risk Level: {agent.TargetRisk} ");
+                Console.WriteLine($"Name: {person?.FirstName} {person?.LastName}, Secret Code: {person?.SecretCode}");
+                Console.WriteLine($"Number of Reports: {numberReports}");
+                Console.WriteLine($"Average Length of Reports: {AvrReports}");
+            }
+        }
+
+        public void ViewAllAlerts()
+        {
+            List<Alert> alerts = managementAlerts.GetAllAlertsByList();
+            foreach (var alert in alerts)
+            {
+                Console.WriteLine("--------------------------------------------------");
+                Console.WriteLine($"Alert ID: {alert.Id}, Timestamp: {alert.Timestamp}, Description: {alert.Reason}");
+                Person person = managementPerson._dalPeople.GetPersonById(alert.TargetId)!;
+                Console.WriteLine($"Target : {person.FirstName} LastName: {person.LastName}, Secret Code: {person.SecretCode}");
+            }
+        }
 
         public bool MenuSelection(string choice)
         {
@@ -114,48 +139,16 @@ namespace Malshinon
                     SendMessage();
                     break;
                 case "2":
-                    List<PersonStatus> potentialAgents = managementReports.AllPotentialAgents();
-                    Console.WriteLine("Potential Agents:");
-
-                    foreach (var agent in potentialAgents)
-                    {
-                        Console.WriteLine("--------------------------------------------------");
-                        Person? person = managementPerson._dalPeople.GetPersonById(agent.PeopleId);
-                        Console.Write($"Potential Agent ID: {agent.PeopleId}, Risk Level: {agent.TargetRisk} ");
-                        Console.WriteLine($"Name: {person?.FirstName} {person?.LastName}, Secret Code: {person?.SecretCode}");
-                        int numberReports = managementIntel.NumberReportsByReporter(agent.PeopleId);
-                        Console.WriteLine($"Number of Reports: {numberReports}");
-                        int AReports = managementIntel.AverageLengthReports(agent.PeopleId);
-                        Console.WriteLine($"Average Length of Reports: {AReports}");
-                    }
+                    Console.WriteLine("Viewing All Potential Agents...");
+                    ViewAllPotentialAgents();
                     break;
                 case "3":
                     Console.WriteLine("Managing Alerts...");
-                    
-                    List<Alert> alerts = managementAlerts.GetAllAlertsByList();
-                    foreach (var alert in alerts)
-                    {
-                        Console.WriteLine("--------------------------------------------------");
-                        Console.WriteLine($"Alert ID: {alert.Id}, Timestamp: {alert.Timestamp}, Description: {alert.Reason}");
-                        Person person = managementPerson._dalPeople.GetPersonById(alert.TargetId)!;
-                        Console.WriteLine($"Target : {person.FirstName} LastName: {person.LastName}, Secret Code: {person.SecretCode}");
-                    }
+                    ViewAllAlerts();
                     break;
                 case "4":
-                    List<PersonStatus> targetRiskAgents = managementReports.AllTargetRisk();
                     Console.WriteLine("Target Risk Agents:");
-
-                    foreach (var agent in targetRiskAgents)
-                    {
-                        Console.WriteLine("--------------------------------------------------");
-                        Person? person = managementPerson._dalPeople.GetPersonById(agent.PeopleId);
-                        Console.Write($"Target Risk Agent ID: {agent.PeopleId}, Risk Level: {agent.TargetRisk} ");
-                        Console.WriteLine($"Name: {person?.FirstName} {person?.LastName}, Secret Code: {person?.SecretCode}");
-                        int numberReports = managementIntel.NumberReportsByReporter(agent.PeopleId);
-                        Console.WriteLine($"Number of Reports: {numberReports}");
-                        int AReports = managementIntel.AverageLengthReports(agent.PeopleId);
-                        Console.WriteLine($"Average Length of Reports: {AReports}");
-                    }
+                    ViewAllTargetRiskAgents();
                     break;
                 case "5":
                     Console.WriteLine("Exiting...");

@@ -2,20 +2,19 @@ namespace Malshinon
 {
     static class MenuPrint
     {
-        static void Print()
+        static public void ShowMenu()
         {
-            Console.Clear();
-
-            Console.WriteLine(" ======= SYSTEM MENU =======");
-            Console.WriteLine(" [1] ");
-            Console.WriteLine(" [2] ");
-            Console.WriteLine(" [3] ");
-            Console.WriteLine(" [4] ");
-            Console.WriteLine(" [5] ");
-            Console.WriteLine(" [6] ");
-            Console.WriteLine();
-            Console.WriteLine("Select an option (1-?): ");
-            Console.WriteLine(" =================== ");
+            Console.WriteLine("1. Send Message");
+            Console.WriteLine("2. View All Potential Agents");
+            Console.WriteLine("3. Manage Alerts");
+            Console.WriteLine("4. Exit");
+        }
+        public static void ShowOption()
+        {
+            Console.WriteLine("Select the type of person:");
+            Console.WriteLine("1. Secret Code");
+            Console.WriteLine("2. First Name and Last Name");
+            Console.Write("Enter your choice: ");
         }
         
     }

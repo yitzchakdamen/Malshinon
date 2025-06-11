@@ -33,7 +33,9 @@ namespace Malshinon
             MySqlDataReader intelReports = GetById(id, "people_status");
             if (intelReports.Read())
             {
-                return Create.CreatingInstancePersonStatus(intelReports);
+                PersonStatus personStatus = Create.CreatingInstancePersonStatus(intelReports);
+                intelReports.Close();
+                return personStatus;
             }
             intelReports.Close();
             return null;

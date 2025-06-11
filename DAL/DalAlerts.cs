@@ -28,7 +28,7 @@ namespace Malshinon
         {
             List<Alert> ListAlerts = new();
 
-            MySqlDataReader reader = GetAll("alerts");
+            MySqlDataReader reader = GetAll("notifications");
 
 
             while (reader.Read())
