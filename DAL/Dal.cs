@@ -31,7 +31,7 @@ namespace Malshinon
             }
             catch (Exception ex)
             {
-                System.Console.WriteLine("Error executing query: " + Query);
+                Console.WriteLine("Error executing query: " + Query);
                 Console.WriteLine(ex.Message);
                 throw;
             }

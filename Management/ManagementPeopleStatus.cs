@@ -7,7 +7,6 @@ namespace Malshinon
 
         public ManagementPeopleStatus(DatabaseManagement database) : base(database) { }
 
-
         public void UpdateNumReports(int peopleId)
         {
             string queryText = $"UPDATE people_status SET num_reports = num_reports + 1 WHERE people_status.people_id = @peopleId;";

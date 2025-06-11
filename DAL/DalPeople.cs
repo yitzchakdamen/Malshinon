@@ -26,7 +26,6 @@ namespace Malshinon
 
             if (_person != null)
             {
-                Console.WriteLine("Inserted person: " + $"FirstName={p.FirstName}, LastName={p.LastName}, SecretCode={p.SecretCode}");
                 return _person;
             }
 
@@ -45,6 +44,21 @@ namespace Malshinon
             }
             reader.Close();
             return ListPerson;
+        }
+
+        public Person? GetPersonById(int id)
+        {
+            string queryText = $"SELECT * FROM people WHERE people.id = @peopleId ;";
+
+            Dictionary<string, object> parametersAndvalue = new() { { "@peopleId", id } };
+            MySqlDataReader intelReports = Query(queryText, parametersAndvalue);
+            
+            if (intelReports.Read())
+            {
+                return Create.CreatingInstancePerson(intelReports);
+            }
+            intelReports.Close();
+            return null;
         }
 
         public Person? GetIdBySecretCode(string secretCode)
