@@ -1,5 +1,4 @@
-using System.Security.Cryptography.X509Certificates;
-using MySqlX.XDevAPI.CRUD;
+using MySql.Data.MySqlClient;
 
 namespace Malshinon
 {
@@ -8,16 +7,12 @@ namespace Malshinon
 
         public ManagementPerson(DatabaseManagement database) : base(database) { }
 
-        public Person AddPerson(string firstName, string lastName)
+        public Person? AddPerson(string firstName, string lastName)
         {
-            Person _person = _dalPeople.Insert(Create.CreatePerson(firstName, lastName));
-            _dalPeopleStatus.Insert(_person.Id);
+            Person? _person = _dalPeople.Insert(Create.CreatePerson(firstName, lastName));
+            if (_person != null)
+                 _dalPeopleStatus.Insert(_person.Id);
             return _person;
-        }
-
-        public Person? GetIdBySecretCode(string secretCode)
-        {
-            return _dalPeople.GetIdBySecretCode(secretCode);
         }
         
     }

@@ -13,10 +13,47 @@ namespace Malshinon
             person.SecretCode = CreateSecretCode();
             return person;
         }
+        static public IntelReport CreateIntelReport(string text, int reporterId, int targetId)
+        {
+            IntelReport report = new();
+            report.Text = text;
+            report.ReporterId = reporterId;
+            report.TargetId = targetId;
+            report.Timestamp = DateTime.Now;
+            return report;
+        }
+
+
+        static public Alert CreateAlert(int targetId, string reason)
+        {
+            Alert alert = new();
+            alert.TargetId = targetId;
+            alert.Reason = reason;
+            alert.Timestamp = DateTime.Now;
+            return alert;
+        }
+        static public Alert CreatingInstanceAlert(MySqlDataReader reader)
+        {
+            Alert alert = new();
+            try
+            {
+                alert.Id = reader.GetInt32("id");
+                alert.TargetId = reader.GetInt32("target_id");
+                alert.Reason = reader.GetString("reason");
+                alert.Timestamp = reader.GetDateTime("timestamp");
+                reader.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return alert;
+        }
 
         static string CreateSecretCode()
         {
-            return Convert.ToString(new Random().Next(1, 10000));
+            Random r = new Random();
+            return $"{(char)r.Next('A', 'Z' + 1)}{(char)r.Next('A', 'Z' + 1)}{(char)r.Next('A', 'Z' + 1)}{Convert.ToString(r.Next(1, 10000))}";
         }
 
 
@@ -29,10 +66,12 @@ namespace Malshinon
                 person.FirstName = reader.GetString("first_name");
                 person.LastName = reader.GetString("last_name");
                 person.SecretCode = reader.GetString("secret_code");
+                reader.Close();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                reader.Close();
             }
             return person;
         }
@@ -47,6 +86,7 @@ namespace Malshinon
                 intelReport.TargetId = reader.GetInt32("target_id");
                 intelReport.Timestamp = reader.GetDateTime("timestamp");
                 intelReport.Text = reader.GetString("text");
+                reader.Close();
             }
             catch (Exception ex)
             {

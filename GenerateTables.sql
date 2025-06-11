@@ -96,3 +96,10 @@ INSERT INTO people_status (people_id, num_reports, num_mentions, reporter, targe
 (8, 1, 1, 1, 1, 2, 2),
 (9, 1, 1, 1, 1, 2, 3),
 (10, 2, 1, 1, 1, 3, 4);
+
+
+DELETE FROM intel_reports;
+DELETE FROM notifications;
+DELETE FROM people_status;
+DELETE FROM people;
+
