@@ -1,20 +1,13 @@
 namespace Malshinon
 {
-    class Tools
+    class PersonaHandling
     {
+        
         private readonly ManagementPerson managementPerson;
-        private readonly ManagementIntel managementIntel;
-        public Tools(ManagementPerson managementPerson, ManagementIntel managementIntel)
+        public PersonaHandling(ManagementPerson managementPerson)
         {
             this.managementPerson = managementPerson;
-            this.managementIntel = managementIntel;
         }
-
-        public void AddIntelText(string text, int personID, int targetId)
-        {
-            managementIntel.AddIntelReports(text, personID, targetId);
-        }
-
 
         public int HandlingPersonalInformation(string? firstName = null, string? lastName = null, string? secretCode = null)
         {
@@ -26,16 +19,16 @@ namespace Malshinon
                 if (person != null)
                 {
                     personID = person.Id;
-                    Console.WriteLine($"Person found with secret code: {secretCode}, ID: {personID}, Name: {person.FirstName} Last Name: {person.LastName}, Secret Code: {person.SecretCode}");
+                    Console.WriteLine($"\nPerson found with secret code: {secretCode}, ID: {personID}, Name: {person.FirstName} Last Name: {person.LastName}, Secret Code: {person.SecretCode}");
                 }
                 else
-                    Console.WriteLine($"Person not found with secret code: {secretCode}");
+                    Console.WriteLine($"\nPerson not found with secret code: {secretCode}");
             }
             else if (firstName != null && lastName != null)
             {
                 Person? _person = managementPerson.AddPerson(firstName, lastName)!;
                 personID = _person.Id;
-                Console.WriteLine($"Person created with name: {firstName} {lastName}, ID: {personID}, Secret Code: {_person.SecretCode}");
+                Console.WriteLine($"\nPerson created with name: {firstName} {lastName}, ID: {personID}, Secret Code: {_person.SecretCode}");
             }
 
             return personID;
