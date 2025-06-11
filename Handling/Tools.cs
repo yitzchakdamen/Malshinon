@@ -10,23 +10,13 @@ namespace Malshinon
             this.managementIntel = managementIntel;
         }
 
-        public int Person(string? firstName = null, string? lastName = null, string? secretCode = null)
-        {
-            return GetPersonId(firstName, lastName, secretCode);
-        }
-
-        public int Target(string? firstName = null, string? lastName = null, string? secretCode = null)
-        {
-            return GetPersonId(firstName, lastName, secretCode);
-        }
-
         public void AddIntelText(string text, int personID, int targetId)
         {
             managementIntel.AddIntelReports(text, personID, targetId);
         }
 
 
-        public int GetPersonId(string? firstName = null, string? lastName = null, string? secretCode = null)
+        public int HandlingPersonalInformation(string? firstName = null, string? lastName = null, string? secretCode = null)
         {
             int personID = -1;
 
@@ -34,10 +24,19 @@ namespace Malshinon
             {
                 Person? person = managementPerson._dalPeople.GetIdBySecretCode(secretCode);
                 if (person != null)
+                {
                     personID = person.Id;
-            }   
+                    Console.WriteLine($"Person found with secret code: {secretCode}, ID: {personID}, Name: {person.FirstName} Last Name: {person.LastName}, Secret Code: {person.SecretCode}");
+                }
+                else
+                    Console.WriteLine($"Person not found with secret code: {secretCode}");
+            }
             else if (firstName != null && lastName != null)
-                personID = managementPerson.AddPerson(firstName, lastName)!.Id;
+            {
+                Person? _person = managementPerson.AddPerson(firstName, lastName)!;
+                personID = _person.Id;
+                Console.WriteLine($"Person created with name: {firstName} {lastName}, ID: {personID}, Secret Code: {_person.SecretCode}");
+            }
 
             return personID;
 

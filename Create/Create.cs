@@ -76,6 +76,27 @@ namespace Malshinon
             return person;
         }
 
+        static public PersonStatus CreatingInstancePersonStatus(MySqlDataReader reader)
+        {
+            PersonStatus personStatus = new();
+            try
+            {
+                personStatus.PeopleId = reader.GetInt32("people_id");
+                personStatus.NumReports = reader.GetInt32("num_reports");
+                personStatus.NumMentions = reader.GetInt32("num_mentions");
+                personStatus.Reporter = reader.GetBoolean("reporter");
+                personStatus.Target = reader.GetBoolean("target");
+                personStatus.PotentialAgent = reader.GetInt32("potential_agent");
+                personStatus.TargetRisk = reader.GetInt32("target_risk");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                reader.Close();
+            }
+            return personStatus;
+        }
+
         static public IntelReport CreatingInstanceIntelReport(MySqlDataReader reader)
         {
             IntelReport intelReport = new();

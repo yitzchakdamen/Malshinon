@@ -9,6 +9,7 @@ namespace Malshinon
         protected ManagementIntel managementIntel;
         protected ManagementPeopleStatus managementPeopleStatus;
         protected ManagementAlerts managementAlerts;
+        protected ManagementReports managementReports;
 
         public HandlingBase(DatabaseManagement database)
         {
@@ -16,6 +17,7 @@ namespace Malshinon
             managementIntel = new(database);
             managementPeopleStatus = new(database);
             managementAlerts = new(database);
+            managementReports = new(database);
         }
 
 
