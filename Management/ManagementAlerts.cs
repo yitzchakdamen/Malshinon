@@ -11,6 +11,11 @@ namespace Malshinon
             _dalAlerts.Insert(alert);
         }
 
+        public List<Alert> GetAllAlertsByList()
+        {
+            return _dalAlerts.GetAllAlerts();
+        }
+
     }
 
 }

@@ -41,7 +41,6 @@ namespace Malshinon
                 alert.TargetId = reader.GetInt32("target_id");
                 alert.Reason = reader.GetString("reason");
                 alert.Timestamp = reader.GetDateTime("timestamp");
-                reader.Close();
             }
             catch (Exception ex)
             {
