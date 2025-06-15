@@ -5,7 +5,7 @@ namespace Malshinon
 {
     class ReportsHandling : HandlingBase
     {
-        public ReportsHandling(DatabaseManagement database) : base(database){}
+        public ReportsHandling(DatabaseManagement database) : base(database) { }
 
         public void ViewAllPotentialAgents()
         {
@@ -54,5 +54,48 @@ namespace Malshinon
                 Console.WriteLine();
             }
         }
+
+        public void AnalysisById(string secretCode)
+        {
+            int Id = managementPerson._dalPeople.GetIdBySecretCode(secretCode)!.Id;
+            Dictionary<string, object> reportData = managementReports.AnalysisById(Id);
+            PrintPersonReportSummary(reportData);
+
+        }
+        public void PrintPersonReportSummary(Dictionary<string, object> reportData)
+        {
+            if (reportData == null || reportData.Count == 0)
+            {
+                Console.WriteLine("No data found for the specified person.");
+                return;
+            }
+
+            Console.WriteLine("===== Person Report Summary =====");
+            Console.WriteLine($"Name: {reportData["firstName"]}  {reportData["lastName"]}");
+            Console.WriteLine($"Secret Code: {reportData["secretCode"]}");
+
+            Console.WriteLine();
+            Console.WriteLine(" --- Status: ---");
+            Console.WriteLine($" - Number of Reports: {reportData["numReports"]}");
+            Console.WriteLine($" - Number of Mentions: {reportData["numMentions"]}");
+            Console.WriteLine($" - Is Reporter: {BoolToYesNo(reportData["reporter"])}");
+            Console.WriteLine($" - Is Target: {BoolToYesNo(reportData["target"])}");
+            Console.WriteLine($" - Potential Agent: {BoolToYesNo(reportData["potentialAgent"])}");
+            Console.WriteLine($" - Target Risk: {BoolToYesNo(reportData["targetRisk"])}");
+
+            Console.WriteLine();
+            Console.WriteLine(" --- Notifications and Reports: --- ");
+            Console.WriteLine($" - Number of Notifications: {reportData["contNotifications"]}");
+            Console.WriteLine($" - Average Report Length: {reportData["avgReports"]:F2} characters");
+            Console.WriteLine("=================================");
+        }
+
+
+        private string BoolToYesNo(object value)
+        {
+            return Convert.ToBoolean(value) ? "Yes" : "No";
+        }
+
+
     }
 }

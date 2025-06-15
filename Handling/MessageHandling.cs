@@ -13,41 +13,21 @@ namespace Malshinon
             analysisHandling = new AnalysisHandling(database);
         }
 
-        public void SendMessage(
-            string? firstNamePerson = null,
-            string? lastNamePerson = null,
-            string? secretCodePerson = null,
-            string? firstNametarget = null,
-            string? lastNametarget = null,
-            string? secretCodetarget = null,
-            string? messageText = null
-            )
+        public void SendMessage(int personID, int targetId, string messageText)
         {
-            var peopleIds = People(firstNamePerson, lastNamePerson, secretCodePerson, firstNametarget, lastNametarget, secretCodetarget);
-            if (peopleIds == null || messageText == null)
-                return;
-
-            Messages(peopleIds.Value.personID, peopleIds.Value.targetId, messageText);
-            UpdateStatus(peopleIds.Value.personID, peopleIds.Value.targetId);
-            analysisHandling.Analysis(peopleIds.Value.personID, peopleIds.Value.targetId, DateTime.Now);
+            Messages(personID, targetId, messageText);
+            UpdateStatus(personID, targetId);
+            analysisHandling.Analysis(personID, targetId, DateTime.Now);
         }
 
 
-        public (int personID, int targetId)? People(
-            string? firstNamePerson = null,
-            string? lastNamePerson = null,
-            string? secretCodePerson = null,
-            string? firstNametarget = null,
-            string? lastNametarget = null,
-            string? secretCodetarget = null
-            )
+        public int? PeopleHandling((string? firstNamePerson, string? lastNamePerson, string? secretCodePerson) information)
         {
-            int personID = personaHandling.HandlingPersonalInformation(firstNamePerson, lastNamePerson, secretCodePerson);
-            int targetId = personaHandling.HandlingPersonalInformation(firstNametarget, lastNametarget, secretCodetarget);
-            if (personID < 0 || targetId < 0)
+            int personID = personaHandling.HandlingPersonalInformation(information.firstNamePerson, information.lastNamePerson, information.secretCodePerson);
+            if (personID < 0)
                 return null;
 
-            return (personID, targetId);
+            return personID;
         }
 
         public void UpdateStatus(int personID, int targetId)

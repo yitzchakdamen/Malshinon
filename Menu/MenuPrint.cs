@@ -19,7 +19,8 @@ namespace Malshinon
             Console.WriteLine("2. View All Potential Agents");
             Console.WriteLine("3. Manage Alerts");
             Console.WriteLine("4. View Target Risk Agents");
-            Console.WriteLine("5. Exit");
+            Console.WriteLine("5. Analysis by Secret Code");
+            Console.WriteLine("6. Exit");
 
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.Write("\nEnter your choice: ");
@@ -29,12 +30,12 @@ namespace Malshinon
         public static void ShowOption()
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("\nSelect the type of person:");
+            Console.WriteLine("\nSelect the option:");
             Console.ResetColor();
 
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("1. Secret Code");
-            Console.WriteLine("2. First Name and Last Name");
+            Console.WriteLine("1. Enter Secret Code");
+            Console.WriteLine("2. Create a person with First Name and Last Name");
             Console.ResetColor();
 
             Console.ForegroundColor = ConsoleColor.Magenta;
