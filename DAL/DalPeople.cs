@@ -11,7 +11,7 @@ namespace Malshinon
         {
             string queryText = @"
             INSERT INTO people (first_name, last_name, secret_code)
-             VALUES (@first_name, @last_name, @secret_code);";
+            VALUES (@first_name, @last_name, @secret_code);";
 
             Dictionary<string, object> parametersAndvalue = new() {
                 { "@first_name", p.FirstName },

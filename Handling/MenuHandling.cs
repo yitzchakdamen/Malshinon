@@ -5,7 +5,7 @@ namespace Malshinon
 {
     class MenuHandling : HandlingBase
     {
-        public MenuHandling(DatabaseManagement database) : base(database) {}
+        public MenuHandling(DatabaseManagement database) : base(database) { }
 
 
 
@@ -28,9 +28,12 @@ namespace Malshinon
                         Console.Write("Enter secret code: ");
                         secretCode = Console.ReadLine()!;
 
-                        if (!string.IsNullOrEmpty(secretCode))
+                        if (secretCode == null)
+                            Console.WriteLine("\n --- secret code cannot be empty. ---");
+                        else
                             isSecretCode = true;
                         break;
+
                     case "2":
                         Console.Write("Enter first name: ");
                         firstName = Console.ReadLine()!;
@@ -38,42 +41,43 @@ namespace Malshinon
                         Console.Write("Enter last name: ");
                         lastName = Console.ReadLine()!;
 
-                        if (!string.IsNullOrEmpty(firstName) || !string.IsNullOrEmpty(lastName))
+                        if (firstName == null || lastName == null)
+                            Console.WriteLine("\n --- First name and last name cannot be empty. ---");
+                        else
                             isSecretCode = true;
                         break;
+
                     default:
                         Console.WriteLine("Unknown person type.");
                         break;
                 }
-
             }
             return (secretCode, firstName, lastName);
 
         }
 
-        public (
-            string? secretCodePerson,
-            string? firstNamePerson,
-            string? lastNamePerson,
-            string? secretCodeTarget,
-            string? firstNameTarget,
-            string? lastNameTarget,
-            string message)
-            SendMessage()
+        public  string ReceiveMessage()
         {
-            Console.WriteLine("\nSending message...");
-
-            Console.Write("\nEnter your information.");
-            (string? secretCodePerson, string? firstNamePerson, string? lastNamePerson) = KnowledgeStatus();
-
-            Console.Write("\nEnter the target information.");
-            (string? secretCodeTarget, string? firstNameTarget, string? lastNameTarget) = KnowledgeStatus();
-
             Console.WriteLine("\nEnter your message: ");
             string message = Console.ReadLine()!;
-            return (secretCodePerson, firstNamePerson, lastNamePerson, secretCodeTarget, firstNameTarget, lastNameTarget, message);
+            return message;
+        }
 
-
+        public string? ReceiveSecretCode()
+        {
+            Console.WriteLine("\nEnter your secret code: ");
+            string? secretCode = Console.ReadLine();
+            if (secretCode == "")
+            {
+                Console.WriteLine("\n --- secret code cannot be empty. ---");
+                return null;
+            }
+            return secretCode;
+        }
+        public (string? firstNamePerson, string? lastNamePerson, string? secretCodePerson) ReceivePersons()
+        {
+            (string? secretCodePerson, string? firstNamePerson, string? lastNamePerson) = KnowledgeStatus();
+            return (firstNamePerson, lastNamePerson, secretCodePerson);
         }
 
     }

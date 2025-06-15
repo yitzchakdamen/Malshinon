@@ -4,8 +4,9 @@ namespace Malshinon
 {
     public class DatabaseManagement
     {
-        static string DbName = "malshinon";
-        static string connectionString = $"Server=Localhost;Port=3306;Database={DbName};User=root;Password='';";
+        // static string DbName = "malshinon";
+        // static string connectionString = $"Server=Localhost;Port=3306;Database={DbName};User=root;Password='';";
+        string connectionString = Environment.GetEnvironmentVariable("connectionString");
         private MySqlConnection _connection;
 
         public DatabaseManagement Connect()

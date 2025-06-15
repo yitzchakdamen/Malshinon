@@ -1,3 +1,4 @@
+using System.Data;
 using MySql.Data.MySqlClient;
 
 namespace Malshinon
@@ -69,7 +70,7 @@ namespace Malshinon
             intelReports.Close();
             return 0;
         }
-        
+
         public int NumberReportsByTime(DateTime Time, int persenId)
         {
             string Query = @"
@@ -79,10 +80,10 @@ namespace Malshinon
             GROUP BY intel_reports.target_id;";
 
             Dictionary<string, object> parametersAndvalue = new() {
-                 { "@target_id", persenId },
-                 { "@timeA",  Time.AddMinutes(-15)},
-                 { "@timeB", Time.AddMinutes(15) }
-                 }; 
+                { "@target_id", persenId },
+                { "@timeA",  Time.AddMinutes(-15)},
+                { "@timeB", Time.AddMinutes(15) }
+                };
 
 
             MySqlDataReader intelReports = _dalIntelReports.Query(Query, parametersAndvalue);
@@ -96,8 +97,6 @@ namespace Malshinon
             intelReports.Close();
             return 0;
         }
-
-
     }
 
 }

@@ -2,7 +2,7 @@ namespace Malshinon
 {
     class PersonaHandling
     {
-        
+
         private readonly ManagementPerson managementPerson;
         public PersonaHandling(ManagementPerson managementPerson)
         {
@@ -15,26 +15,36 @@ namespace Malshinon
 
             if (secretCode != null)
             {
-                Person? person = managementPerson._dalPeople.GetIdBySecretCode(secretCode);
-                if (person != null)
-                {
-                    personID = person.Id;
-                    Console.WriteLine($"\nPerson found with secret code: {secretCode}, ID: {personID}, Name: {person.FirstName} Last Name: {person.LastName}, Secret Code: {person.SecretCode}");
-                }
-                else
-                    Console.WriteLine($"\nPerson not found with secret code: {secretCode}");
+                personID = CheckingPerson(secretCode);
             }
-            else if (firstName != null && lastName != null)
+            else if (!string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName))
             {
-                Person? _person = managementPerson.AddPerson(firstName, lastName)!;
-                personID = _person.Id;
-                Console.WriteLine($"\nPerson created with name: {firstName} {lastName}, ID: {personID}, Secret Code: {_person.SecretCode}");
+                personID = CreatingPerson(firstName, lastName);
             }
-
             return personID;
 
         }
-        
+        public int CheckingPerson(string secretCode)
+        {
+            Person? person = managementPerson._dalPeople.GetIdBySecretCode(secretCode);
+            if (person != null)
+            {
+                Console.WriteLine($"\nPerson found with secret code: {secretCode}, ID: {person.Id}, Name: {person.FirstName} Last Name: {person.LastName}, Secret Code: {person.SecretCode}");
+                return person.Id;
+            }
+            else
+                Console.Clear();
+                Console.WriteLine($"\nPerson not found with secret code: {secretCode}");
+            return -1;
+
+        }
+        public int CreatingPerson(string firstName, string lastName)
+        {
+            Person? _person = managementPerson.AddPerson(firstName, lastName)!;
+            Console.WriteLine($"\nPerson created with name: {firstName} {lastName}, ID: {_person.Id}, Secret Code: {_person.SecretCode}");
+            return _person.Id;
+        }
+
     }
     
 }

@@ -11,7 +11,7 @@ namespace Malshinon
         {
             string queryText = @"
             INSERT INTO notifications (target_id, Reason, timestamp)
-             VALUES (@target_id, @Reason, @timestamp);";
+            VALUES (@target_id, @Reason, @timestamp);";
 
             Dictionary<string, object> parametersAndvalue = new() {
                 { "@target_id", alert.TargetId },

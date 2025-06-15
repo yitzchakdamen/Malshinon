@@ -25,13 +25,13 @@ namespace Malshinon
         private void AnalyzeMessageLength(int personID, int averageLength)
         {
             if (averageLength >= 100)
-                managementAlerts.AddAlert(personID, "Suspiciously long message detected.");
+                managementAlerts.AddAlert(personID, "High message length detected.");
         }
 
         private void AnalyzeReporterActivity(int personID, int numberReportsByReporter)
         {
             if (numberReportsByReporter >= 10)
-                managementAlerts.AddAlert(personID, "Suspicious activity detected based on message analysis.");
+                managementAlerts.AddAlert(personID, "High activity detected from this reporter.");
         }
 
         private void AnalyzeTargetReports(int targetId, int numberReportsByTarget)
@@ -55,7 +55,7 @@ namespace Malshinon
                 {
                     managementPeopleStatus.UpdatePotentialAgent(personID, 1);
                     managementAlerts.AddAlert(personID, "Potential agent status updated based on message analysis.");
-                    Console.WriteLine($"Potential agent status updated for Person ID: {personID} based on message analysis. Number of reports: {numberReportsByReporter}.");
+                    Console.WriteLine($" >===>> >===>> Potential agent status updated for Person ID: {personID} based on message analysis. Number of reports: {numberReportsByReporter}.");
                 }
             }
             else
@@ -73,7 +73,7 @@ namespace Malshinon
                 {
                     managementPeopleStatus.UpdateTargetRisk(targetId, 1);
                     managementAlerts.AddAlert(targetId, "Target risk status updated based on message analysis.");
-                    Console.WriteLine($"Target risk status updated for Target ID: {targetId} based on message analysis. Number of reports: {numberReportsByTarget}.");
+                    Console.WriteLine($"  >===>> >===>> Target risk status updated for Target ID: {targetId} based on message analysis. Number of reports: {numberReportsByTarget}.");
                 }
             }
             else

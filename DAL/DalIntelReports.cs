@@ -12,7 +12,7 @@ namespace Malshinon
         {
             string queryText = @"
             INSERT INTO intel_reports (reporter_id, target_id, text, timestamp)
-             VALUES (@reporter_id, @target_id, @text, @timestamp);";
+            VALUES (@reporter_id, @target_id, @text, @timestamp);";
 
             Dictionary<string, object> parametersAndvalue = new() {
                 { "@reporter_id", intelReport.ReporterId },
